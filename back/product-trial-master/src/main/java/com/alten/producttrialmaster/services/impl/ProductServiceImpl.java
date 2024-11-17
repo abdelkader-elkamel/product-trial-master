@@ -1,6 +1,7 @@
 package com.alten.producttrialmaster.services.impl;
 
 import com.alten.producttrialmaster.dtos.ProductDto;
+import com.alten.producttrialmaster.exceptions.ProductNotFoundException;
 import com.alten.producttrialmaster.models.entities.Product;
 import com.alten.producttrialmaster.mappers.ProductMapper;
 import com.alten.producttrialmaster.repositories.ProductRepository;
@@ -12,8 +13,8 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private ProductRepository productRepository;
-    private ProductMapper productMapper;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
@@ -36,13 +37,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getProductById(Long id) {
-        Product product = productRepository.findById(id).get();
+            Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
+
+
         return productMapper.entityToDto(product);
     }
 
     @Override
     public ProductDto updateProduct(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
 
         if(productDto.getCode() != null){
             product.setCode(productDto.getCode());
@@ -84,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto deleteProduct(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
         productRepository.deleteById(id);
         return productMapper.entityToDto(product);
     }

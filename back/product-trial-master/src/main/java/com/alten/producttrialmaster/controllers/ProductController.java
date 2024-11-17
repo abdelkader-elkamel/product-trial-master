@@ -2,6 +2,7 @@ package com.alten.producttrialmaster.controllers;
 
 import com.alten.producttrialmaster.dtos.ProductDto;
 import com.alten.producttrialmaster.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @PostMapping
-    ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto){
+    ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto){
         return new ResponseEntity<>(productService.createProduct(productDto), HttpStatus.CREATED);
     }
     @GetMapping

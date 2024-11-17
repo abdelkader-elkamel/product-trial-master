@@ -1,20 +1,38 @@
 package com.alten.producttrialmaster.dtos;
 
 import com.alten.producttrialmaster.models.enums.InventoryStatus;
+import jakarta.validation.constraints.*;
 
 
 public class ProductDto {
     private Long id;
+    @NotEmpty(message = "Product code should not be empty")
+    @NotNull(message = "Product code should not be null")
     private String code;
+    @NotEmpty(message = "Product name should not be empty")
+    @NotNull(message = "Product name should not be null")
     private String name;
     private String description;
     private String image;
+    @NotEmpty(message = "Product category should not be empty")
+    @NotNull(message = "Product category should not be null")
     private String category;
+    @NotNull(message = "Product price should not be null")
+    @DecimalMin(value = "0.01", inclusive = true, message = "Product price must be greater than zero")
     private Double price;
+    @NotNull(message = "Product quantity should not be null")
+    @Min(value = 0, message = "Product quantity must be equal or greater than zero")
     private Integer quantity;
+    @NotEmpty(message = "Internal reference should not be empty")
+    @NotNull(message = "Internal reference should not be null")
     private String internalReference;
+    @NotNull(message = "Shell id should not be null")
     private Integer shellId;
+    @NotNull(message = "Inventory status should not be null")
     private InventoryStatus inventoryStatus;
+    @NotNull(message = "Rating should not be null")
+    @Min(value = 1, message = "Product rating must range from 1 to 5")
+    @Max(value = 5, message = "Product rating must range from 1 to 5")
     private Integer rating;
     private Long createdAt;
     private Long updatedAt;
